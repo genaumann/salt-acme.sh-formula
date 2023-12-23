@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "@commitlint/config-angular": "^18.4.3",
+    "@commitlint/types": "^18.4.3"
+  }
+}

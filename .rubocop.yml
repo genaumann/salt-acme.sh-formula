@@ -1,0 +1,8 @@
+---
+Layout/LineLength:
+  Max: 88
+Metrics/BlockLength:
+  Exclude:
+    - control
+    - describe
+  Max: 30

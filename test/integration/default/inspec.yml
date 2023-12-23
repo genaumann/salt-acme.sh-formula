@@ -1,0 +1,13 @@
+---
+name: default
+title: template formula
+maintainer: Gino Naumann
+version: 0.0.0
+licence: Apache-2.0
+summary: Template formula
+supports:
+  - platform-name: ubuntu
+  - platform-name: debian
+  - platform-name: fedora
+  - platform-name: opensuse
+  - platform-name: rocky

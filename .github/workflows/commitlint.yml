@@ -1,0 +1,23 @@
+---
+name: Lint Commit Messages
+on:
+  - push
+  - pull_request
+
+jobs:
+  commitlint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Run npm install
+        run: npm install
+      - uses: wagoid/commitlint-github-action@v5
+        with:
+          configFile: commitlint.config.ts
+        env:
+          NODE_PATH: ${{ github.workspace }}/node_modules
