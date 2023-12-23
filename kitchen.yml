@@ -29,8 +29,7 @@ suites:
     provisioner:
       state_top:
         base:
-          "*":
-            - git
+          "*": []
       pillars_from_files: {}
       pillars:
         top.sls:
@@ -45,7 +44,7 @@ provisioner:
   log_level: debug
   salt_install: none
   require_chef: false
-  formula: git
+  formula: acme_sh
   salt_copy_filter:
     - .git/
     - .github/

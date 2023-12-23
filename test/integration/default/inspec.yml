@@ -1,10 +1,10 @@
 ---
-name: default
-title: template formula
+name: acme.sh
+title: acme.sh formula
 maintainer: Gino Naumann
 version: 0.0.0
 licence: Apache-2.0
-summary: Template formula
+summary: This formula controls acme.sh
 supports:
   - platform-name: ubuntu
   - platform-name: debian
