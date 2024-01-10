@@ -5,6 +5,7 @@ This module interacts with acme.sh https://github.com/acmesh-official/acme.sh
 """
 
 import logging
+import re
 
 import salt.utils.path
 from salt.exceptions import CommandExecutionError, SaltInvocationError, CommandNotFoundError
@@ -87,6 +88,55 @@ def install(
     install_dir = "/opt/acme.sh"
   
   return(f"acme.sh successfully installed in {install_dir}")
+
+
+def register(
+    email,
+    script_path=None,
+    run_as='root',
+    cert_path=None
+):
+  
+  """
+  Register account @ zeroSSL CA
+  This step is required if you are using zeroSSL CA
+
+  email
+    email to register
+
+  script_path
+    absolute path to acme.sh script
+    default = ~/.acme.sh/acme.sh
+
+  run_as
+    run the command as a specified user
+    default: root
+
+  cert_path
+    installation dir of certs
+    default = dirname of `script_path`
+  """
+
+  home_dir = __salt__['user.info'](run_as)['home']
+
+  acme_bin = _get_acme_bin(script_path, home_dir)
+
+  cmd = [acme_bin, "--register-account", "-m", email]
+
+  if cert_path:
+    cmd.append(f"--home {cert_path}")
+
+  register = __salt__["cmd.run_all"](" ".join(cmd), python_shell=False, run_as=run_as)
+
+  if register["retcode"] == 0:
+    match = re.search(r"ACCOUNT_THUMBPRINT='([^']+)'", register["stdout"])
+    if match:
+      ret = {"account_thumbprint": match.group(1)}
+    else:
+      __context__["retcode"] = 1
+      ret = "Account registration failed"
+
+  return ret
 
 
 def cert(
