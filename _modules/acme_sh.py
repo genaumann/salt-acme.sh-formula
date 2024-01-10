@@ -292,6 +292,8 @@ def cert(
   else:
     if issue["stdout"].find("Next renewal time is") != -1:
       ret = f"Certificate in {cert_path}/{name} is valid, re run with `force=True`"
+    elif issue["stdout"].find("acme.sh --register-account -m my@example.com") != -1:
+      ret = f"Please register your account: acme_sh.register my@example.com cert_path={cert_path}"
     else:
       ret = issue
 
