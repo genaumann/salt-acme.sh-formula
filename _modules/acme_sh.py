@@ -12,6 +12,17 @@ from salt.exceptions import CommandExecutionError, SaltInvocationError, CommandN
 
 log = logging.getLogger(__name__)
 
+def _get_acme_bin(
+    script_path,
+    home_dir
+):
+
+  acme_bin = script_path if script_path else f"{home_dir}/.acme.sh/acme.sh"
+  if not salt.utils.path.which_bin([acme_bin]):
+    raise CommandNotFoundError("acme.sh script is not available. Specify the absolute script path in `script_path`")
+
+  return acme_bin
+
 def install(
     email,
     user='root',
@@ -158,10 +169,7 @@ def cert(
       __context__["retcode"] = 1
       return "Install socat to use standalone mode first"
 
-  # check command exist
-  acme_bin = script_path if script_path else f"{home_dir}/.acme.sh/acme.sh"
-  if not salt.utils.path.which_bin([acme_bin]):
-    raise CommandNotFoundError("acme.sh script is not available. Specify the absolute script path in `script_path`")
+  acme_bin = _get_acme_bin(script_path, home_dir)
 
   # check keysize
   possible_keylength = ["ec-256", "ec-384", "ec-521", "2048", "3072", "4096"]
