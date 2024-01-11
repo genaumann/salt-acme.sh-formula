@@ -253,3 +253,45 @@ def cert(
       ret = issue
 
   return ret
+
+def list(
+    user='root',
+    cert_path=None
+):
+
+  """
+  List all certificates in given cert_path
+
+  user
+    run the command as a specified user
+    default: root
+
+  cert_path
+    installation dir of certs
+    default = ~/.acme.sh
+  """
+
+  home_dir = __salt__["user.info"](user)["home"]
+
+  acme_bin = _get_acme_bin(home_dir)
+
+  cmd = [acme_bin, "--list"]
+
+  if cert_path:
+    cmd.extend["--cert-path", cert_path]
+
+  list_crt = __salt__["cmd.run_all"](" ".join(cmd), python_shell=False, runas=user)
+
+  if list_crt["retcode"] == 0:
+    # map output
+    lines = list_crt["stdout"].strip().split('\n')
+    keys = lines[0].split()
+    ret = []
+    for line in lines[1:]:
+        values = line.split()
+        entry = dict(zip(keys, values))
+        ret.append(entry)
+  else:
+    ret = list_crt
+
+  return ret
