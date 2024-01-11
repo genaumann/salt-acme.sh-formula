@@ -295,3 +295,61 @@ def list(
     ret = list_crt
 
   return ret
+
+def renew(
+    name,
+    user='root',
+    cert_path=None,
+    force=False
+):
+  
+  """
+  Renew a certificate
+
+  name
+    Common name of the certificate (main_domain)
+
+  user
+    run the command as a specified user
+    default: root
+
+  cert_path
+    installation dir of certs
+    default: ~/.acme.sh
+
+  force
+    force renewing a certificate
+    default: False
+  """
+
+  home_dir = __salt__["user.info"](user)["home"]
+
+  acme_bin = _get_acme_bin(home_dir)
+
+  cmd = [acme_bin, "--renew", "--domain", name]
+
+  if cert_path:
+    cmd.extend(["--cert-path", cert_path])
+  else:
+    cert_path = f"{home_dir}/.acme.sh"
+  
+  if force:
+    cmd.append("--force")
+
+  renew = __salt__["cmd.run_all"](" ".join(cmd), python_shell=False, runas=user)
+
+  if renew["retcode"] == 0:
+    ret = {
+      "certificate": f"{cert_path}/{name}/{name}.cer",
+      "private_key": f"{cert_path}/{name}/{name}.key"
+    }
+  else:
+    next_renew = re.search(r"Next renewal time is: (.*)", renew["stdout"])
+    if next_renew:
+      ret = f"Next renewal time is {next_renew.group(1)}, add force=True to renew"
+    elif renew["stdout"].find("is not an issued domain, skip") != -1:
+      ret = f"Domain {name} is not an issued domain"
+    else:
+      ret = renew
+
+  return ret
