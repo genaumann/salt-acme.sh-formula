@@ -353,3 +353,30 @@ def renew(
       ret = renew
 
   return ret
+
+def version(
+    user='root'
+):
+
+  """
+  Get version of acme.sh
+
+  user
+    run the command as a specified user
+    default: root
+  """
+
+  home_dir = __salt__["user.info"](user)["home"]
+
+  acme_bin = _get_acme_bin(home_dir)
+
+  cmd = [acme_bin, "--version"]
+
+  version_cmd = __salt__["cmd.run_all"](" ".join(cmd), python_shell=False, runas=user)
+
+  if version_cmd["retcode"] == 0:
+    ret = re.search(r"v(.*)", version_cmd["stdout"]).group(1)
+  else:
+    ret = version_cmd
+
+  return ret
