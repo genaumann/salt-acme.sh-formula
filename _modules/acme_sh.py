@@ -4,6 +4,7 @@ acme.sh module
 This module interacts with acme.sh https://github.com/acmesh-official/acme.sh
 """
 
+import os
 import logging
 import re
 
@@ -22,9 +23,33 @@ def _get_acme_bin(home_dir):
 
   return script_path
 
+def _upgrade(home_dir, user):
+
+  acme_bin = _get_acme_bin(home_dir)
+  old_version = version(user)
+
+  cmd = [acme_bin, "--upgrade"]
+
+  upgrade = __salt__["cmd.run_all"](" ".join(cmd), python_shell=False, runas=user)
+
+  if upgrade["retcode"] == 0:
+    new_version = version(user)
+    
+    if old_version == new_version:
+      ret = "Already up-to-date"
+    else:
+      ret = {"old": old_version, "new": new_version}
+
+  else:
+    ret = upgrade
+
+  return ret
+
 def install(
     email,
     user='root',
+    upgrade=False,
+    force=False
 ):
   """
   Install acme.sh
@@ -34,11 +59,30 @@ def install(
 
   user
     user to install
-    default = root
+    default: root
+
+  upgrade
+    upgrade acme.sh
+    default: False
+
+  force
+    force installation
+    default: False
   """
 
-  # clone https://github.com/acmesh-official/acme.sh
+  home_dir = __salt__["user.info"](user)["home"]
+  script_path = f"{home_dir}/.acme.sh/acme.sh"
 
+  # if already installed
+  if __salt__["file.file_exists"](script_path):
+
+    if upgrade:
+      return _upgrade(home_dir, user)
+
+    if not force:
+      return "Already installed, re-run with force=True to force installation"
+
+  # clone https://github.com/acmesh-official/acme.sh
   clone_name = f"acme.sh-{user}"
   clone = __salt__["git.clone"]("/tmp", url="https://github.com/acmesh-official/acme.sh", name=clone_name)
 
@@ -56,10 +100,8 @@ def install(
   else:
     __context__["retcode"] = 1
     return "Installation failed, see logfiles for more information"
-
-  install_dir = __salt__["user.info"](user)["home"]
   
-  return(f"acme.sh successfully installed in {install_dir}")
+  return(f"acme.sh successfully installed in {os.path.dirname(script_path)}")
 
 
 def register(
