@@ -152,7 +152,9 @@ def issue(
     user="root",
     cert_path=None,
     dns_credentials=None,
-    force=False
+    force=False,
+    validTo=None,
+    validFrom=None
 ):
   """
   Obtain a certificate
@@ -206,6 +208,14 @@ def issue(
   force
     force issuing a certificate
     default = False
+
+  validTo
+    NotAfter field in cert
+    see https://github.com/acmesh-official/acme.sh/wiki/Validity
+  
+  validFrom
+    NotBefore field in cert
+    see https://github.com/acmesh-official/acme.sh/wiki/Validity
   """
 
   home_dir = __salt__['user.info'](user)['home']
@@ -274,6 +284,12 @@ def issue(
   # force
   if force:
     cmd.append("--force")
+
+  # validity
+  if validTo:
+    cmd.extend["--valid-to", validTo]
+  if validFrom:
+    cmd.extend["--valid-from", validFrom]
 
   if acme_mode == "dns":
     log.debug("Set dns_credentials as temporary env")
