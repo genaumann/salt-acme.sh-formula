@@ -98,7 +98,7 @@ def register(
   return ret
 
 
-def cert(
+def issue(
     name,
     acme_mode,
     aliases=None,
