@@ -336,7 +336,7 @@ def list(
   cmd = [acme_bin, "--list"]
 
   if cert_path:
-    cmd.extend["--cert-path", cert_path]
+    cmd.extend["--cert-home", cert_path]
 
   list_crt = __salt__["cmd.run_all"](" ".join(cmd), python_shell=False, runas=user)
 
@@ -440,7 +440,7 @@ def renew(
   cmd = [acme_bin, "--renew", "--domain", name]
 
   if cert_path:
-    cmd.extend(["--cert-path", cert_path])
+    cmd.extend(["--cert-home", cert_path])
   else:
     cert_path = f"{home_dir}/.acme.sh"
   
