@@ -354,6 +354,59 @@ def list(
 
   return ret
 
+def info(
+  name,
+  user='root',
+  cert_path=None
+):
+  """
+  Get info about a certificate
+
+  name
+    Common name of the certificate (main_domain)
+
+  user
+    run the command as a specified user
+    default: root
+
+  cert_path
+    installation dir of certs
+    default: ~/.acme.sh
+  """
+
+  if not __salt__["file.directory_exists"](cert_path):
+    __context__["retcode"] = 1
+    return f"Certificate path {cert_path} does not exist"
+  
+  if not __salt__["file.directory_exists"](f"{cert_path}/{name}"):
+    __context__["retcode"] = 1
+    return f"Certificate {name} does not exist"
+
+  home_dir = __salt__["user.info"](user)["home"]
+
+  acme_bin = _get_acme_bin(home_dir)
+
+  cmd = [acme_bin, "--info", "--domain", name]
+
+  if cert_path:
+    cmd.extend(["--cert-home", cert_path])
+
+  info = __salt__["cmd.run_all"](" ".join(cmd), python_shell=False, runas=user)
+
+  if info["retcode"] == 0:
+    # map output to dict
+    info_dict = {}
+    lines = info["stdout"].strip().split('\n')
+    for line in lines:
+      key, value = line.split('=')
+      info_dict[key] = value
+
+    ret = info_dict
+  else:
+    ret = info
+
+  return ret
+
 def renew(
     name,
     user='root',
