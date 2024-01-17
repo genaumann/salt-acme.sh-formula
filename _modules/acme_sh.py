@@ -45,6 +45,15 @@ def _upgrade(home_dir, user):
 
   return ret
 
+def _generate_crt_ret(name, cert_path):
+
+  return {
+    "certificate": f"{cert_path}/{name}/{name}.cer",
+    "private_key": f"{cert_path}/{name}/{name}.key",
+    "fullchain": f"{cert_path}/{name}/fullchain.cer",
+    "ca": f"{cert_path}/{name}/ca.cer"
+  }
+
 def install(
     email,
     user='root',
@@ -298,10 +307,7 @@ def issue(
   issue = __salt__["cmd.run_all"](" ".join(cmd), python_shell=False, runas=user)
 
   if issue["retcode"] == 0:
-    ret = {
-      "certificate": f"{cert_path}/{name}/{name}.cer",
-      "private_key": f"{cert_path}/{name}/{name}.key"
-    }
+    ret = _generate_crt_ret(name, cert_path)
   else:
     if issue["stdout"].find("Next renewal time is") != -1:
       ret = f"Certificate in {cert_path}/{name} is valid, re run with `force=True`"
@@ -458,10 +464,7 @@ def renew(
   renew = __salt__["cmd.run_all"](" ".join(cmd), python_shell=False, runas=user)
 
   if renew["retcode"] == 0:
-    ret = {
-      "certificate": f"{cert_path}/{name}/{name}.cer",
-      "private_key": f"{cert_path}/{name}/{name}.key"
-    }
+    ret = _generate_crt_ret(name, cert_path)
   else:
     next_renew = re.search(r"Next renewal time is: (.*)", renew["stdout"])
     if next_renew:
