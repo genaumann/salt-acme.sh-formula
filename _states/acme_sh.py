@@ -4,6 +4,12 @@ acme.sh state module
 This module interacts with acme_sh salt module
 """
 
+import time
+import salt.exceptions
+import logging
+
+log = logging.getLogger(__name__)
+
 def __virtual__():
   """
   Only load if the acme_sh module is available in __salt__
@@ -96,4 +102,179 @@ def installed(
     # if acme.sh is already installed
     ret["comment"] = "acme.sh is already installed"
   
+  return ret
+
+def cert(
+  name,
+  acme_mode,
+  aliases=[],
+  server=None,
+  keysize="4096",
+  dns_plugin=None,
+  webroot=None,
+  http_port=None,
+  user="root",
+  cert_path=None,
+  dns_credentials=None,
+  force=False,
+  validTo=None,
+  validFrom=None,
+  ):
+  """
+  Ensure that a certificate is issued
+
+  name
+    Domain name to issue certificate for
+
+  acme_mode
+    ACME mode to use for certificate issuance (webroot, standalone, standalone-tls-alpn, dns)
+
+  aliases
+    List of aliases to issue certificate for
+
+  server
+    ACME server to use for certificate issuance
+
+  keysize
+    Key size to use for certificate issuance
+    default = 4096
+    possible values: 
+      ec-256 (prime256v1, "ECDSA P-256", which is the default key type)
+      ec-384 (secp384r1, "ECDSA P-384")
+      ec-521 (secp521r1, "ECDSA P-521", which is not supported by Let's Encrypt yet.)
+      2048 (RSA2048)
+      3072 (RSA3072)
+      4096 (RSA4096)
+
+  dns_plugin
+    DNS plugin to use for certificate issuance
+    see https://github.com/acmesh-official/acme.sh/wiki/dnsapi
+
+  webroot
+    Webroot to use for certificate issuance
+    Full path needed, user needs write access to this directory
+
+  http_port
+    Port to use for certificate issuance
+    default = 80
+
+  user
+    User to issue certificate for
+  
+  cert_path
+    Path to store certificate at
+    default = ~/.acme.sh
+
+  dns_credentials
+    Dictionary of credentials to use for DNS plugin
+    Every value needs to be a string
+    see https://github.com/acmesh-official/acme.sh/wiki/dnsapi
+
+  force
+    Force reissue of certificate
+
+  validTo
+    NotAfter field in cert
+    see https://github.com/acmesh-official/acme.sh/wiki/Validity
+
+  validFrom
+    NotBefore field in cert
+    see https://github.com/acmesh-official/acme.sh/wiki/Validity
+  """
+
+  ret = {
+    "name": name,
+    "changes": {},
+    "result": True,
+    "comment": "",
+  }
+
+  # error checking
+
+  if aliases and not isinstance(aliases, list):
+    raise salt.exceptions.SaltInvocationError("aliases must be a list")
+  
+  if dns_credentials and not isinstance(dns_credentials, dict):
+    raise salt.exceptions.SaltInvocationError("dns_credentials must be a dictionary")
+  
+  if validTo and not isinstance(validTo, str):
+    raise salt.exceptions.SaltInvocationError("validTo must be a string")
+  
+  if validFrom and not isinstance(validFrom, str):
+    raise salt.exceptions.SaltInvocationError("validFrom must be a string")
+  
+  if acme_mode == "dns" and not dns_plugin:
+    raise salt.exceptions.SaltInvocationError("dns_plugin must be specified when acme_mode is dns")
+  
+  if acme_mode == "dns" and not dns_credentials:
+    raise salt.exceptions.SaltInvocationError("dns_credentials must be specified when acme_mode is dns")
+
+  if acme_mode == "webroot" and not webroot:
+    raise salt.exceptions.SaltInvocationError("webroot must be specified when acme_mode is webroot")
+
+  # check cert is available and set for renewal
+
+  crt_info = __salt__["acme_sh.info"](name, user=user, cert_path=cert_path)
+
+  if __context__["acme_sh.info"]["code"] == 1 or "Le_NextRenewTime" not in crt_info or force:
+    log.debug("Certificate is not available or force is enabled")
+    # if test mode is enabled
+    if __opts__["test"]:
+      ret["result"] = None
+      ret["comment"] = "Certificate would be issued"
+      return ret
+
+    # issue certificate
+    issue = __salt__["acme_sh.issue"](
+      name,
+      acme_mode,
+      aliases=",".join(aliases),
+      server=server,
+      keysize=keysize,
+      dns_plugin=dns_plugin,
+      webroot=webroot,
+      http_port=http_port,
+      user=user,
+      cert_path=cert_path,
+      dns_credentials=dns_credentials,
+      force=force,
+      validTo=validTo,
+      validFrom=validFrom,
+    )
+
+    if __context__["retcode"] == 0:
+      ret["changes"][name] = issue
+      ret["comment"] = "Certificate has been issued"
+      # if failed to issue certificate
+    else:
+      ret["result"] = False
+      ret["comment"] = issue["stderr"]
+
+  # if certificate is available and set for renewal
+  elif int(time.time()) > int(crt_info["Le_NextRenewTime"]):
+    log.debug("Certificate is available and set for renewal")
+    # if test mode is enabled
+    if __opts__["test"]:
+      ret["result"] = None
+      ret["comment"] = "Certificate would be renewed"
+      return ret
+
+    # renew certificate
+    renew = __salt__["acme_sh.renew"](
+      name,
+      user=user,
+      cert_path=cert_path,
+      force=force,
+    )
+    
+    if __context__["retcode"] == 0:
+      ret["changes"][name] = renew
+      ret["comment"] = "Certificate has been renewed"
+    # if failed to renew certificate
+    else:
+      ret["result"] = False
+      ret["comment"] = renew["stderr"]
+  else:
+    ret["comment"] = "Certificate is already up-to-date"
+
   return ret
