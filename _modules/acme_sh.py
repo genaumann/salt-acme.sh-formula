@@ -374,13 +374,8 @@ def info(
     default: ~/.acme.sh
   """
 
-  if not __salt__["file.directory_exists"](cert_path):
-    __context__["retcode"] = 1
-    return f"Certificate path {cert_path} does not exist"
-  
-  if not __salt__["file.directory_exists"](f"{cert_path}/{name}"):
-    __context__["retcode"] = 1
-    return f"Certificate {name} does not exist"
+  if not "acme_sh.info" in __context__:
+    __context__["acme_sh.info"] = {"code": 0}
 
   home_dir = __salt__["user.info"](user)["home"]
 
@@ -390,6 +385,19 @@ def info(
 
   if cert_path:
     cmd.extend(["--cert-home", cert_path])
+  else:
+    cert_path = f"{home_dir}/.acme.sh"
+
+  # check if cert_path exists
+  if not __salt__["file.directory_exists"](cert_path):
+    __context__["acme_sh.info"]["code"] = 1
+    __context__["retcode"] = 1
+    return f"Certificate path {cert_path} does not exist"
+  # check if cert exists
+  if not __salt__["file.directory_exists"](f"{cert_path}/{name}"):
+    __context__["acme_sh.info"]["code"] = 1
+    __context__["retcode"] = 1
+    return f"Certificate {name} does not exist"
 
   info = __salt__["cmd.run_all"](" ".join(cmd), python_shell=False, runas=user)
 
