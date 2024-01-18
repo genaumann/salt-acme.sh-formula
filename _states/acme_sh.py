@@ -10,6 +10,15 @@ import logging
 
 log = logging.getLogger(__name__)
 
+if '__context__' not in globals():
+  __context__ = {}
+
+if '__opts__' not in globals():
+  __opts__ = {}
+
+if '__salt__' not in globals():
+  __salt__ = {}
+
 def __virtual__():
   """
   Only load if the acme_sh module is available in __salt__

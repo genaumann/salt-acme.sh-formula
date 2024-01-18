@@ -11,8 +11,17 @@ import re
 import salt.utils.path
 from salt.exceptions import CommandExecutionError, SaltInvocationError, CommandNotFoundError
 
-
 log = logging.getLogger(__name__)
+
+if '__context__' not in globals():
+  __context__ = {}
+
+if '__opts__' not in globals():
+  __opts__ = {}
+
+if '__salt__' not in globals():
+  __salt__ = {}
+
 
 def _get_acme_bin(home_dir):
 
