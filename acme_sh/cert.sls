@@ -35,6 +35,9 @@ acme_sh_cert_{{ user }}_{{ domain }}:
       {%- if cert_config.get('valid_from') %}
     - valid_from: {{ cert_config['valid_from'] }}
       {%- endif %}
+      {%- if cert_config.get('insecure') %}
+    - insecure: {{ cert_config['insecure'] }}
+      {%- endif %}
     {%- endfor %}
   {%- endif %}
 {%- endfor %}

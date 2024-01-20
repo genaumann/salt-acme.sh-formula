@@ -175,6 +175,7 @@ def issue(
     force=False,
     valid_to=None,
     valid_from=None,
+    insecure=False,
 ):
     """
     Obtain a certificate
@@ -236,6 +237,10 @@ def issue(
     valid_from
       NotBefore field in cert
       see https://github.com/acmesh-official/acme.sh/wiki/Validity
+
+    insecure
+      disable ssl verification
+      default: False
     """
 
     home_dir = __salt__["user.info"](user)["home"]
@@ -319,6 +324,10 @@ def issue(
         cmd.extend(["--valid-to", valid_to])
     if valid_from:
         cmd.extend(["--valid-from", valid_from])
+
+    # insecure
+    if insecure:
+        cmd.append("--insecure")
 
     if acme_mode == "dns":
         log.debug("Set dns_credentials as temporary env")
@@ -443,7 +452,7 @@ def info(name, user="root", cert_path=None):
     return ret
 
 
-def renew(name, user="root", cert_path=None, force=False):
+def renew(name, user="root", cert_path=None, force=False, insecure=False):
     """
     Renew a certificate
 
@@ -461,6 +470,10 @@ def renew(name, user="root", cert_path=None, force=False):
     force
       force renewing a certificate
       default: False
+
+    insecure
+      disable ssl verification
+      default: False
     """
 
     home_dir = __salt__["user.info"](user)["home"]
@@ -476,6 +489,9 @@ def renew(name, user="root", cert_path=None, force=False):
 
     if force:
         cmd.append("--force")
+
+    if insecure:
+        cmd.append("--insecure")
 
     renew_cmd = __salt__["cmd.run_all"](" ".join(cmd), python_shell=False, runas=user)
 

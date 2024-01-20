@@ -131,6 +131,7 @@ def cert(
     force=False,
     valid_to=None,
     valid_from=None,
+    insecure=False,
 ):
     """
     Ensure that a certificate is issued
@@ -192,6 +193,10 @@ def cert(
     valid_from
       NotBefore field in cert
       see https://github.com/acmesh-official/acme.sh/wiki/Validity
+
+    insecure
+      Disable SSL certificate verification
+      default = False
     """
 
     ret = {
@@ -265,6 +270,7 @@ def cert(
             force=force,
             valid_to=valid_to,
             valid_from=valid_from,
+            insecure=insecure,
         )
 
         if __context__["retcode"] == 0:
@@ -290,6 +296,7 @@ def cert(
             user=user,
             cert_path=cert_path,
             force=force,
+            insecure=insecure,
         )
 
         if __context__["retcode"] == 0:
