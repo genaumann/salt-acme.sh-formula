@@ -8,8 +8,13 @@
     {%- set user = parts[1] %}
     {%- set domain = parts[2] | regex_replace('(?<!^)(?=[A-Z])', '.') | lower %}
     {%- set var = '_'.join(parts[3:]) %}
-      {#- if acme_sh.get(user) and acme_sh[user].get(domain) and acme_sh[user][domain].get(acme_mode) == 'dns' #}
-    {%- set acme_sh = acme_sh | update_dict_key_value(user ~ ':certs:' ~ domain ~ ':dns_credentials', {var:value}) %}
-      {#- endif #}
+    {%- set user_exists = acme_sh.get(user) %}
+    {%- set domain_exists = user_exists and acme_sh[user]['certs'].get(domain) %}
+    {%- set acme_mode_is_dns = domain_exists and acme_sh[user]['certs'][domain].get('acme_mode') == 'dns' %}
+
+    {%- if acme_mode_is_dns %}
+      {%- set acme_sh = acme_sh | update_dict_key_value(user ~ ':certs:' ~ domain ~ ':dns_credentials', {var:value}) %}
+    {%- endif %}
+
   {%- endif %}
 {%- endfor %}
