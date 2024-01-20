@@ -1,0 +1,15 @@
+{% set acme_sh = salt['pillar.get']('acme_sh', {}) %}
+
+{# get credentials from env #}
+{%- set envs = salt['environ.items']() %}
+{%- for key, value in envs.items() %}
+  {%- if key.startswith('ACMESH_') %}
+    {%- set parts = key.split('_') %}
+    {%- set user = parts[1] %}
+    {%- set domain = parts[2] | regex_replace('(?<!^)(?=[A-Z])', '.') | lower %}
+    {%- set var = '_'.join(parts[3:]) %}
+      {#- if acme_sh.get(user) and acme_sh[user].get(domain) and acme_sh[user][domain].get(acme_mode) == 'dns' #}
+    {%- set acme_sh = acme_sh | update_dict_key_value(user ~ ':certs:' ~ domain ~ ':dns_credentials', {var:value}) %}
+      {#- endif #}
+  {%- endif %}
+{%- endfor %}
