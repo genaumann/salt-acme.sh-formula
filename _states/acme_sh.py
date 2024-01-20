@@ -203,7 +203,8 @@ def cert(
 
     # error checking
 
-    if aliases and not isinstance(aliases, list):
+    # aliases can be a string ?
+    if aliases and aliases != "None" and not isinstance(aliases, list):
         raise salt.exceptions.SaltInvocationError("aliases must be a list")
 
     if dns_credentials and not isinstance(dns_credentials, dict):
@@ -254,10 +255,10 @@ def cert(
             acme_mode,
             aliases=",".join(aliases) if aliases else None,
             server=server,
-            keysize=keysize,
+            keysize=str(keysize),
             dns_plugin=dns_plugin,
             webroot=webroot,
-            http_port=http_port,
+            http_port=str(http_port),
             user=user,
             cert_path=cert_path,
             dns_credentials=dns_credentials,
