@@ -16,7 +16,7 @@ jobs:
           - default-debian-12-30065
           - default-rocky9-30065
           - default-fedora38-30065
-          - default-opensuse15-30065
+          - default-opensuse15-30060
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
