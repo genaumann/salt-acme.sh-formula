@@ -30,14 +30,23 @@ suites:
       state_top:
         base:
           "*":
+            - pre.pkg
+            - pre.pebble
+            - docker
+            - docker.compose
+            - docker.compose.up
+            - pre.dns
+            - pre.env
             - acme_sh
       pillars_from_files:
         acme_sh.sls: test/salt/pillar/acme_sh.sls
+        pebble.sls: test/salt/pillar/pebble.sls
       pillars:
         top.sls:
           base:
             "*":
               - acme_sh
+              - pebble
     verifier:
       inspec_tests:
         - path: test/integration/default
@@ -53,6 +62,12 @@ provisioner:
     - .git/
     - .github/
     - .kitchen/
+  dependencies:
+    - name: docker
+      repo: git
+      source: https://github.com/saltstack-formulas/docker-formula
+    - name: pre
+      path: ./test/salt/state
 
 verifier:
   name: inspec
