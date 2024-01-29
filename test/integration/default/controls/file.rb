@@ -4,7 +4,7 @@ control "Cert files #{os.name} #{os.release}" do
   title 'Test cert files'
 
   crts = ['standalone.gn98.de', 'alpn.gn98.de']
-  
+
   crts.each do |crt|
     dir = "/home/vagrant/crt/#{crt}"
 

@@ -6,10 +6,10 @@ control "Cert x509 #{os.name}" do
   crts = {
     'standalone.gn98.de' => {
       'alias' => 'www.standalone.gn98.de',
-      'keylength' => 2048,
+      'keylength' => 2048
     },
     'alpn.gn98.de' => {
-      'keylength' => 4096,
+      'keylength' => 4096
     }
   }
   crts.each do |cn, conf|
@@ -19,7 +19,9 @@ control "Cert x509 #{os.name}" do
       it { should be_certificate }
       its('subject.CN') { should eq cn }
       its('keylength') { should eq conf['keylength'] }
-      its('subject_alt_names') { should include "DNS:#{conf['alias']}" } if conf['alias']
+      if conf['alias']
+        its('subject_alt_names') { should include "DNS:#{conf['alias']}" }
+      end
       its('validity_in_days') { should be > 30 }
     end
   end
