@@ -1,2 +1,3 @@
 include:
   - .pebble
+  - .hetzner
