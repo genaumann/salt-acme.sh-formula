@@ -1,0 +1,34 @@
+---
+acme_sh:
+  root:
+    email: user@example.com
+    ugrade: False # auto upgrade acme_sh - default
+    force: False # force reinstallation of acme_sh - default
+    certs:
+      example.com:
+        acme_mode: standalone
+        aliases:
+          - hello.example.com
+        keysize: 4096
+        http_port: 80 # default
+      second.example.com:
+        acme_mode: webroot
+        webroot: /var/www/second.example.com # user need write access
+        keysize: ec-256
+        server: zerossl # see https://github.com/acmesh-official/acme.sh/wiki/Server
+        valid_to: 2024-08-09T09:08:09Z" # see https://github.com/acmesh-official/acme.sh/wiki/Validity
+      third.example:.com:
+        acme_mode: dns
+        dns_plugin: dns_azure # see https://github.com/acmesh-official/acme.sh/wiki/dnsapi
+        dns_credentials:
+          AZUREDNS_SUBSCRIPTIONID: xxx
+          AZUREDNS_TENANTID: xxx
+          AZUREDNS_APPID: xxx
+          AZUREDNS_CLIENTSECRET: xxx
+      fourth.example.com:
+        acme_mode: standalone-tls-apln
+        keysize: ec-521
+        server: letsencript_test
+        http_port: 443
+        cert_path: /etc/ssl/acme_sh # default in users home
+

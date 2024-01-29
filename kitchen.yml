@@ -19,22 +19,34 @@ platforms:
     driver:
       box: genaumann/fedora38-salt
       box_version: "3006.5"
-  - name: opensuse15-3006.5
+  - name: opensuse15-3006.0
     driver:
       box: genaumann/opensuse15-salt
-      box_version: "3006.5"
+      box_version: "3006.0"
 
 suites:
   - name: default
     provisioner:
       state_top:
         base:
-          "*": []
-      pillars_from_files: {}
+          "*":
+            - pre.pkg
+            - pre.pebble
+            - docker
+            - docker.compose
+            - docker.compose.up
+            - pre.dns
+            - pre.env
+            - acme_sh
+      pillars_from_files:
+        acme_sh.sls: test/salt/pillar/acme_sh.sls
+        pebble.sls: test/salt/pillar/pebble.sls
       pillars:
         top.sls:
           base:
-            "*": []
+            "*":
+              - acme_sh
+              - pebble
     verifier:
       inspec_tests:
         - path: test/integration/default
@@ -45,10 +57,17 @@ provisioner:
   salt_install: none
   require_chef: false
   formula: acme_sh
+  pre_salt_command: <%= ENV['CRED'] %>
   salt_copy_filter:
     - .git/
     - .github/
     - .kitchen/
+  dependencies:
+    - name: docker
+      repo: git
+      source: https://github.com/saltstack-formulas/docker-formula
+    - name: pre
+      path: ./test/salt/state
 
 verifier:
   name: inspec

@@ -27,7 +27,7 @@ plugins:
         - type: test
           release: patch
         - type: ci
-          release: patch
+          release: false
         - type: build
           release: patch
 
