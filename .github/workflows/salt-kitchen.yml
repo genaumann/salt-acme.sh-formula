@@ -31,4 +31,4 @@ jobs:
           apt: vagrant virtualbox
       - name: Run kitchen test
         run: |
-          bundle exec kitchen test ${{ matrix.instances }}
+          CRED="export HETZNER_TOKEN=${{ secrets.HETZNER_TOKEN }}" bundle exec kitchen test ${{ matrix.instances }}
