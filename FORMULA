@@ -1,7 +1,7 @@
 name: acme.sh
 os: Debian, Ubuntu, Fedora, OpenSuse, Rocky
 os_family: Debian, RedHat, Suse
-version: 0.0.0
+version: 1.0.0
 release: 1
 minimum_version: 2015.8
 summary: acme.sh formula
