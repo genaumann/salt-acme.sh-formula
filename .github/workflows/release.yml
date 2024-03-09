@@ -8,18 +8,27 @@ on:
       - completed
     branches:
       - main
-    status:
-      - success
 
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@v2
+        with:
+          app_id: ${{ secrets.RELEASE_APP_ID }}
+          private_key: ${{ secrets.RELEASE_PRIVATE_KEY }}
       - name: Checkout
         uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Semantic Release
+          token: ${{ steps.generate_token.outputs.token }}
+      - name: Run semantic-release
         uses: cycjimmy/semantic-release-action@v4
         with:
           extra_plugins: |
@@ -31,4 +40,4 @@ jobs:
             @semantic-release/github
             conventional-changelog-conventionalcommits
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
