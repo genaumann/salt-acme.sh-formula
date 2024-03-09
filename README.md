@@ -82,14 +82,16 @@ kitchen test <instance>
 
 This formula has been tested under the following operating systems and salt versions.
 
-| OS           | 3006.0 | 3006.5       |
-| ------------ | ------ | ------------ |
-| Debian 12    | :x:    | ✅           |
-| Ubuntu 22.04 | :x:    | ✅           |
-| Rocky 9      | :x:    | ✅           |
-| Fedora 38    | :x:    | ✅           |
-| OpenSUSE 15  | ✅     | Not released |
+| OS           | 3006.0 | 3006.5       | 3006.6           | 3006.7           | 3007.0           |
+| ------------ | ------ | ------------ | ---------------- | ---------------- | ---------------- |
+| Debian 12    | :x:    | ✅           | Not testable[^1] | Not testable[^1] | Not testable[^1] |
+| Ubuntu 22.04 | :x:    | ✅           | Not testable[^1] | Not testable[^1] | Not testable[^1] |
+| Rocky 9      | :x:    | ✅           | Not testable[^1] | Not testable[^1] | Not testable[^1] |
+| Fedora 38    | :x:    | ✅           | Not testable[^1] | Not testable[^1] | Not testable[^1] |
+| OpenSUSE 15  | ✅     | Not released | Not released     | Not released     | Not released     |
 
 [install]: https://docs.saltproject.io/en/latest/topics/development/conventions/formulas.html
 [lint_badge]: https://github.com/genaumann/salt-acme.sh-formula/actions/workflows/lint.yml/badge.svg?branch=main
 [test_badge]: https://github.com/genaumann/salt-acme.sh-formula/actions/workflows/salt-kitchen.yml/badge.svg?branch=main
+
+[^1]: Because of a bug since 3007.6 the formula is not testable, but should work - see [bug in release](https://github.com/saltstack/salt/issues/66133)
