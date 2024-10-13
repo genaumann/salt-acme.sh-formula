@@ -3,22 +3,46 @@ driver:
   name: vagrant
 
 platforms:
-  - name: ubuntu-22.04-3006.5
+  - name: ubuntu-22.04-3006.9
     driver:
       box: genaumann/ubuntu2204-salt
-      box_version: "3006.5"
-  - name: debian-12-3006.5
+      box_version: "3006.9"
+  - name: ubuntu-24.04-3006.9
+    driver:
+      box: genaumann/ubuntu2404-salt
+      box_version: "3006.9"
+  - name: ubuntu-22.04-3007.1
+    driver:
+      box: genaumann/ubuntu2204-salt
+      box_version: "3007.1"
+  - name: ubuntu-24.04-3007.1
+    driver:
+      box: genaumann/ubuntu2404-salt
+      box_version: "3007.1"
+  - name: debian-12-3006.9
     driver:
       box: genaumann/debian12-salt
-      box_version: "3006.5"
-  - name: rocky9-3006.5
+      box_version: "3006.9"
+  - name: debian-12-3007.1
+    driver:
+      box: genaumann/debian12-salt
+      box_version: "3007.1"
+  - name: rocky9-3006.9
     driver:
       box: genaumann/rocky9-salt
-      box_version: "3006.5"
-  - name: fedora38-3006.5
+      box_version: "3006.9"
+  - name: rocky9-3007.1
     driver:
-      box: genaumann/fedora38-salt
-      box_version: "3006.5"
+      box: genaumann/rocky9-salt
+      box_version: "3007.1"
+  - name: fedora40-3006.9
+    driver:
+      box: genaumann/fedora40-salt
+      box_version: "3006.9"
+  - name: fedora40-3007.1
+    driver:
+      box: genaumann/fedora40-salt
+      box_version: "3007.1"
   - name: opensuse15-3006.0
     driver:
       box: genaumann/opensuse15-salt

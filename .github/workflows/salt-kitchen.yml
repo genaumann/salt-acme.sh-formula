@@ -12,10 +12,16 @@ jobs:
     strategy:
       matrix:
         instances:
-          - default-ubuntu-2204-30065
-          - default-debian-12-30065
-          - default-rocky9-30065
-          - default-fedora38-30065
+          - default-ubuntu-2204-30069
+          - default-ubuntu-2404-30069
+          - default-ubuntu-2204-30071
+          - default-ubuntu-2404-30071
+          - default-debian-12-30069
+          - default-debian-12-30071
+          - default-rocky9-30069
+          - default-rocky9-30071
+          - default-fedora40-30069
+          - default-fedora40-30071
           - default-opensuse15-30060
     steps:
       - name: Checkout Repository
