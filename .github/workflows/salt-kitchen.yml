@@ -22,7 +22,7 @@ jobs:
           - default-rocky9-30071
           - default-fedora40-30069
           - default-fedora40-30071
-          - default-opensuse15-30060
+          #- default-opensuse15-30060 / symlink of docker formula not resolved ... can't test
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
