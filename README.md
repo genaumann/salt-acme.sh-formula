@@ -53,7 +53,7 @@ Issues or renews certificate with `acme.sh`.
 
 ## Available state modules
 
-- [`acme_sh`](docs/state_acme_sh.md)
+- [`acmesh`](docs/state_acme_sh.md)
 
 ## Testing
 
@@ -77,18 +77,6 @@ bundle install
 kitchen list # list all available test instances
 kitchen test <instance>
 ```
-
-## OS support matrix
-
-This formula has been tested under the following operating systems and salt versions.
-
-| OS           | 3006.0 | 3006.5       |
-| ------------ | ------ | ------------ |
-| Debian 12    | :x:    | ✅           |
-| Ubuntu 22.04 | :x:    | ✅           |
-| Rocky 9      | :x:    | ✅           |
-| Fedora 38    | :x:    | ✅           |
-| OpenSUSE 15  | ✅     | Not released |
 
 [install]: https://docs.saltproject.io/en/latest/topics/development/conventions/formulas.html
 [lint_badge]: https://github.com/genaumann/salt-acme.sh-formula/actions/workflows/lint.yml/badge.svg?branch=main
