@@ -1,6 +1,6 @@
 # Execution Module acme_sh
 
-The `acme.sh` module provides an interface to [acme.sh](https://acme.sh).
+The `acme_sh` module provides an interface to [acme.sh](https://acme.sh).
 
 `acme.sh` is installed in the user's home directory.
 You can specify a different user with the `user` parameter, but you are not able to specify a different install path.
@@ -12,7 +12,7 @@ Of course you can change the cert path with the `cert_path` parameter.
 - [acme_sh.install](#acme_shinstall)
 - [acme_sh.renew](#acme_shrenew)
 - [acme_sh.info](#acme_shinfo)
-- [acme.sh_version](#acmesh_version)
+- [acme_shl.version](#acmesh_version)
 
 ### acme_sh.issue
 
@@ -111,7 +111,7 @@ Returns information about a certificate.
 | `user`      | `str` | `False`  | `root`           | User to run acme.sh as.               |
 | `cert_path` | `str` | `False`  | `$HOME/.acme.sh` | Path where certificates are stored in |
 
-### acme.sh_version
+### acme_sh.version
 
 Returns the version of `acme.sh`.
 

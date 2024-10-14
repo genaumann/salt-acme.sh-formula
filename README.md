@@ -28,32 +28,32 @@ This formula is versioned according to [Semantic Versioning](http://semver.org/)
 
 ## Available states
 
-- [`acme.sh`](acme.sh/init.sls)
-- [`acme.sh.install`](acme.sh/install.sls)
-- [`acme.sh.issue`](acme.sh/issue.sls)
+- [`acme_sh`](acme_sh/init.sls)
+- [`acme_sh.install`](acme_sh/install.sls)
+- [`acme_sh.issue`](acme_sh/issue.sls)
 
-### `acme.sh`
+### `acme_sh`
 
 Includes the following states:
 
-- `acme.sh.install`
-- `acme.sh.issue`
+- `acme_sh.install`
+- `acme_sh.issue`
 
-### `acme.sh.install`
+### `acme_sh.install`
 
 Installs `acme.sh`.
 
-### `acme.sh.issue`
+### `acme_sh.issue`
 
 Issues or renews certificate with `acme.sh`.
 
 ## Available execution modules
 
-- [`acme.sh`](docs/module_acme_sh.md)
+- [`acme_sh`](docs/module_acme_sh.md)
 
 ## Available state modules
 
-- [`acme.sh`](docs/state_acme_sh.md)
+- [`acme_sh`](docs/state_acme_sh.md)
 
 ## Testing
 
