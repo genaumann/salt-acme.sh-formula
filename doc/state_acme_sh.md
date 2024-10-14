@@ -22,23 +22,24 @@ Installs `acme.sh`.
 
 Ensures that a certificate is issued and valid with `acme.sh`.
 
-| Parameter         | Type   | Required                                | Default          | Description                                                                     |
-| ----------------- | ------ | --------------------------------------- | ---------------- | ------------------------------------------------------------------------------- |
-| `name`            | `str`  | `True`                                  |                  | Domain to issue certificate for.                                                |
-| `acme_mode`       | `str`  | `True`                                  |                  | Mode to issue certificate with. (webroot, standalone, standalone-tls-alpn, dns) |
-| `aliases`         | `list` | `False`                                 | `None`           | List of aliases to issue certificate for.                                       |
-| `server`          | `str`  | `False`                                 | `letsencrypt`    | ACME server to use.                                                             |
-| `keysize`         | `str`  | `False`                                 | `4096`           | Key size to use.                                                                |
-| `dns_plugin`      | `str`  | `False`, `True` if acme_mode is dns     | `None`           | DNS plugin to use.                                                              |
-| `dns_credentials` | `dict` | `False`, `True` if acme_mode is dns     | `None`           | DNS plugin credentials to use.                                                  |
-| `webroot`         | `str`  | `False`, `True` if acme_mode is webroot | `None`           | Webroot path to use.                                                            |
-| `http_port`       | `str`  | `False`                                 | `80`             | HTTP port to use.                                                               |
-| `user`            | `str`  | `False`                                 | `root`           | User to run acme.sh as.                                                         |
-| `cert_path`       | `str`  | `False`                                 | `$HOME/.acme.sh` | Path to store certificates in.                                                  |
-| `force`           | `bool` | `False`                                 | `False`          | Force issue certificate.                                                        |
-| `valid_to`        | `str`  | `False`                                 | `None`           | Validity of certificate.                                                        |
-| `valid_from`      | `str`  | `False`                                 | `None`           | Validity of certificate.                                                        |
-| `insecure`        | `bool` | `False`                                 | `False`          | Don't verify SSL-Cert of acme server                                            |
+| Parameter         | Type    | Required                                | Default          | Description                                                                     |
+| ----------------- | ------- | --------------------------------------- | ---------------- | ------------------------------------------------------------------------------- |
+| `name`            | `str`   | `True`                                  |                  | Domain to issue certificate for.                                                |
+| `acme_mode`       | `str`   | `True`                                  |                  | Mode to issue certificate with. (webroot, standalone, standalone-tls-alpn, dns) |
+| `aliases`         | `list`  | `False`                                 | `None`           | List of aliases to issue certificate for.                                       |
+| `server`          | `str`   | `False`                                 | `letsencrypt`    | ACME server to use.                                                             |
+| `keysize`         | `str`   | `False`                                 | `4096`           | Key size to use.                                                                |
+| `dns_plugin`      | `str`   | `False`, `True` if acme_mode is dns     | `None`           | DNS plugin to use.                                                              |
+| `dns_credentials` | `dict`  | `False`, `True` if acme_mode is dns     | `None`           | DNS plugin credentials to use.                                                  |
+| `webroot`         | `str`   | `False`, `True` if acme_mode is webroot | `None`           | Webroot path to use.                                                            |
+| `http_port`       | `str`   | `False`                                 | `80`             | HTTP port to use.                                                               |
+| `user`            | `str`   | `False`                                 | `root`           | User to run acme.sh as.                                                         |
+| `cert_path`       | `str`   | `False`                                 | `$HOME/.acme.sh` | Path to store certificates in.                                                  |
+| `force`           | `bool`  | `False`           ****                  | `False`          | Force issue certificate.                                                        |
+| `valid_to`        | `str`   | `False`                                 | `None`           | Validity of certificate.                                                        |
+| `valid_from`      | `str`   | `False`                                 | `None`           | Validity of certificate.                                                        |
+| `insecure`        | `bool`  | `False`                                 | `False`          | Don't verify SSL-Cert of acme server                                            |
+| `retry`           | `dicts` | `False`                                 | `None`           | Set state retry - see [State Retry docs][1]                                     |
 
 **DNS Credentials**
 
@@ -62,3 +63,5 @@ A dash `-` in the domain is currently not supported.
 ## Examples
 
 You can use the predefined salt states in combination with the pillar structure from [`example.yml`](../example.yml).
+
+[1]: https://docs.saltproject.io/en/latest/ref/states/requisites.html#retrying-states
