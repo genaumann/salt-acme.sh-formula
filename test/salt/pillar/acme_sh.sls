@@ -1,7 +1,8 @@
 ---
 {%- set os = grains['os'] | lower %}
 {%- set osrelease = grains['osrelease'] | regex_replace('(\.)', '') | lower %}
-{%- set release_str = os + osrelease %}
+{%- set saltrelease = grains['saltversion'] | regex_replace('(\.)', '') %}
+{%- set release_str = os + osrelease + saltrelease %}
 _release_str: {{ release_str }}
 acme_sh:
   vagrant:
@@ -13,6 +14,8 @@ acme_sh:
         keysize: '4096'
         server: letsencrypt_test
         cert_path: /home/vagrant/crt
+        retry:
+          attempts: 3
       standalone.gn98.de:
         acme_mode: standalone
         server: https://localhost:14000/dir
