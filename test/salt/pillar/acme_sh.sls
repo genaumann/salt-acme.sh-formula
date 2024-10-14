@@ -1,7 +1,8 @@
 ---
 {%- set os = grains['os'] | lower %}
 {%- set osrelease = grains['osrelease'] | regex_replace('(\.)', '') | lower %}
-{%- set release_str = os + osrelease %}
+{%- set saltrelease = grains['saltversion'] | regex_replace('(\.)', '') %}
+{%- set release_str = os + osrelease + saltrelease %}
 _release_str: {{ release_str }}
 acme_sh:
   vagrant:
