@@ -13,6 +13,8 @@ acme_sh:
         keysize: '4096'
         server: letsencrypt_test
         cert_path: /home/vagrant/crt
+        retry:
+          attempts: 3
       standalone.gn98.de:
         acme_mode: standalone
         server: https://localhost:14000/dir

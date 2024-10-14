@@ -38,6 +38,9 @@ acme_sh_cert_{{ user }}_{{ domain }}:
       {%- if cert_config.get('insecure') %}
     - insecure: {{ cert_config['insecure'] }}
       {%- endif %}
+      {%- if cert_config.get('retry') %}
+    - retry: {{ cert_config['retry'] }}
+      {%- endif %}
     {%- endfor %}
   {%- endif %}
 {%- endfor %}
