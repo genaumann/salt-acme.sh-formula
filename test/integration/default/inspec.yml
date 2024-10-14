@@ -2,7 +2,7 @@
 name: acme.sh
 title: acme.sh formula
 maintainer: Gino Naumann
-version: 1.0.0
+version: 1.1.0
 licence: Apache-2.0
 summary: This formula controls acme.sh
 supports:

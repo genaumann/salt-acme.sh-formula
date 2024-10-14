@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.1.0](https://github.com/genaumann/salt-acme.sh-formula/compare/v1.0.0...v1.1.0) (2024-10-14)
+
+### ✨ Feature ✨
+
+* add retry option to acme_sh.cert ([5679bbf](https://github.com/genaumann/salt-acme.sh-formula/commit/5679bbfdd6c8eddfd26eeb1004795139fbcd8ee2))
+
+### 💿 Continuous Integration 💿
+
+* add --break-system-packages to pip ([733d855](https://github.com/genaumann/salt-acme.sh-formula/commit/733d85550aa7412e1344c65abdeb49e4f711748a))
+* add hashicorp apt source ([ff9f000](https://github.com/genaumann/salt-acme.sh-formula/commit/ff9f000d02b6bcd5268ddd9704359f61b6cb3ad3))
+* **github:** use gh app for release ([25f81f1](https://github.com/genaumann/salt-acme.sh-formula/commit/25f81f1926377ed55e7df588ac0f80e9f73090e2))
+* **release:** configure rules [skip ci] ([6d5e8fd](https://github.com/genaumann/salt-acme.sh-formula/commit/6d5e8fd45b595ff0b0928e97b15071bba32755e6))
+* remove opensuse from testing ([3b2837f](https://github.com/genaumann/salt-acme.sh-formula/commit/3b2837f970a026f67dcdd414bdfcf926e0eb0da5))
+
+### 🧪 Test 🧪
+
+* add saltrelease to test domain ([872859d](https://github.com/genaumann/salt-acme.sh-formula/commit/872859ddc5a3a07a9e28f6d2a0471fc94f58d027))
+* fix missing CN in pebble certs ([d98034d](https://github.com/genaumann/salt-acme.sh-formula/commit/d98034d052cf6af9c2ad1fb72015a55466ecf56d))
+
 ## 1.0.0 (2024-01-30)
 
 
