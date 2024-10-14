@@ -17,8 +17,8 @@ control "Cert x509 #{os.name}" do
 
     describe x509_certificate("#{dir}/fullchain.cer") do
       it { should be_certificate }
-      its('subject.CN') { should eq cn }
       its('keylength') { should eq conf['keylength'] }
+      its('subject_alt_names') { should include "DNS:#{cn}" }
       if conf['alias']
         its('subject_alt_names') { should include "DNS:#{conf['alias']}" }
       end
